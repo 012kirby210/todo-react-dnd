@@ -22,12 +22,19 @@ const TaskList = styled.div`
   min-height: 100px;
 `;
 
-const Column = ({column, tasks}) => {
+const Column = ({column, tasks, isDropDisabled}) => {
 
   return (
     <Container>
       <Title>{column.title}</Title>
-      <Droppable droppableId={column.id}>
+      <Droppable droppableId={column.id}
+        // conditionaly set the droppable disabled upon the type of the columns
+        // les items drag et drop sur les mêmes type de columns
+        // type={ 'column-3' === column.id ? 'done' : 'active' }
+
+        // ou de manière arbitraire:
+        isDropDisabled={isDropDisabled}
+      >
         {
           (provided, snapshot) => {
             /**
@@ -38,7 +45,6 @@ const Column = ({column, tasks}) => {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 isdraggingover={snapshot.isDraggingOver}
-
               >{tasks.map((t, i) => <Task key={t.id} task={t} index={i}/>)}
                 {provided.placeholder}</TaskList>
             );
