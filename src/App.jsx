@@ -12,6 +12,9 @@ function App() {
     /**
      * result = { draggableId, type, reason, source : {droppableid, index }, destination: { droppable, index } }
      */
+    document.body.style.color = 'inherit';
+    document.body.style.backgroundColor = 'white';
+
     const { destination, source, draggableId } = result;
 
     if (!destination){
@@ -47,9 +50,23 @@ function App() {
 
   }
 
+  const handleDragStart = () => {
+    document.body.style.color = 'orange';
+    document.body.style.transition = 'background-color: 0.3s ease';
+  };
+
+  const handleDragUpdate = update => {
+    const { destination } = update;
+    const opacity = destination ? destination.index / Object.keys(state.tasks).length : 0;
+    document.body.style.backgroundColor = `rgba(153,141,217, ${opacity}`;
+  }
+
+
   return (
     <DragDropContext
       onDragEnd={handleDragEnd}
+      onDragStart={handleDragStart}
+      onDragUpdate={handleDragUpdate}
     >
     <div>
     {
