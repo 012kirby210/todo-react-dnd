@@ -2,6 +2,14 @@ import styled from "styled-components";
 import { Draggable } from '@hello-pangea/dnd';
 import {useRef} from "react";
 
+const Handle = styled.div`
+  width: 20px;
+  height: 20px;
+  background-color: orange;
+  border-radius: 4px;
+  margin-right: 8px;
+`;
+
 const Container = styled.div`
   border: 1px solid lightgrey;
   padding: 8px;
@@ -21,10 +29,10 @@ return (
         return (
           <Container
             {...provided.draggableProps}
-            {...provided.dragHandleProps}
             ref={provided.innerRef}
             isdragging={snapshot.isDragging}
           >
+            <Handle {...provided.dragHandleProps} />
             {task.content}
           </Container>)
       }
