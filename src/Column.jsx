@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Task from './Task.jsx';
+import { Droppable } from '@hello-pangea/dnd';
 
 const Container = styled.div`
 margin: 8px;
@@ -14,10 +15,22 @@ const TaskList = styled.div`
 `;
 
 const Column = ({column, tasks}) => {
+
   return (
     <Container>
       <Title>{column.title}</Title>
-      <TaskList>{tasks.map( t => <Task key={t.id} task={t} />)}</TaskList>
+      <Droppable droppableId={column.id}>
+        {
+          (provided) => (
+            <TaskList
+              {...provided.droppableProps }
+              ref={provided.innerRef}
+
+            >{provided.placeholder}
+              {tasks.map( (t,i) => <Task key={t.id} task={t} index={i}/>)}</TaskList>
+          )
+        }
+      </Droppable>
     </Container>
   );
 }
