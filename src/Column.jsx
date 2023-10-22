@@ -28,6 +28,8 @@ const Column = ({column, tasks, isDropDisabled}) => {
     <Container>
       <Title>{column.title}</Title>
       <Droppable droppableId={column.id}
+                 // la direction est définie comme une prop
+                 // direction="horizontal | vertical"
         // conditionaly set the droppable disabled upon the type of the columns
         // les items drag et drop sur les mêmes type de columns
         // type={ 'column-3' === column.id ? 'done' : 'active' }
