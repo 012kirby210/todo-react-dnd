@@ -4,9 +4,16 @@ import Column from './Column.jsx';
 import { DragDropContext } from '@hello-pangea/dnd';
 import {useState} from "react";
 
+import styled from 'styled-components';
+
 function App() {
 
   const [state, setState] = useState(initialData)
+
+  const Container = styled.div`
+  display: flex;
+  
+  `;
 
   const handleDragEnd = (result) => {
     /**
@@ -28,21 +35,52 @@ function App() {
       return ;
     }
 
-    const column = state.columns[source.droppableId];
-    const newTaskIds = Array.from(column.taskids);
-    newTaskIds.splice(source.index, 1);
-    newTaskIds.splice(destination.index, 0, draggableId);
+    const startColumn = state.columns[source.droppableId];
+    const endColumn = state.columns[destination.droppableId];
 
-    const newColumn = {
-      ...column,
-      taskids: newTaskIds,
+    if ( startColumn === endColumn ){
+      const newTaskIds = Array.from(startColumn.taskids);
+      newTaskIds.splice(source.index,1);
+      newTaskIds.splice(destination.index,0,draggableId);
+
+      const newColumn = {
+        ...startColumn,
+        taskids: newTaskIds
+      };
+
+      const newState = {
+        ...state,
+        columns:{
+          ...state.columns,
+          [newColumn.id]: newColumn
+        }
+      };
+
+      setState(newState);
+      return;
+    }
+
+    const newTaskIdsEnd = Array.from(endColumn.taskids);
+    const newTaskIdsStart = Array.from(startColumn.taskids);
+    newTaskIdsStart.splice(source.index, 1);
+    newTaskIdsEnd.splice(destination.index, 0, draggableId);
+
+    const newStartColumn = {
+      ...startColumn,
+      taskids: newTaskIdsStart,
+    };
+
+    const newEndColumn = {
+      ...endColumn,
+      taskids: newTaskIdsEnd,
     };
 
     const newState = {
       ...state,
       columns: {
         ...state.columns,
-        [newColumn.id]: newColumn,
+        [newStartColumn.id]: newStartColumn,
+        [newEndColumn.id]: newEndColumn,
       }
     };
 
@@ -68,7 +106,7 @@ function App() {
       onDragStart={handleDragStart}
       onDragUpdate={handleDragUpdate}
     >
-    <div>
+    <Container>
     {
       state.columnOrder.map( columnId => {
         const column = state.columns[columnId];
@@ -78,7 +116,7 @@ function App() {
       })
     }
 
-  </div>
+  </Container>
     </DragDropContext>
       );
 }
